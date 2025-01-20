@@ -1,0 +1,1 @@
+# invite-pregen-wallet
