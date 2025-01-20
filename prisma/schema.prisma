@@ -18,3 +18,14 @@ model Post {
 
     @@index([name])
 }
+
+model User {
+    id          Int      @id @default(autoincrement())
+    name        String   @default("")
+    phoneNumber String   
+    authStatus  Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([name])
+}
