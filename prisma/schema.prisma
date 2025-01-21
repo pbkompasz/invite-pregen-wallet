@@ -21,7 +21,7 @@ model Post {
 
 model User {
     id          Int      @id @default(autoincrement())
-    name        String   @default("")
+    name        String 
     phoneNumber String   
     authStatus  Boolean  @default(false)
     createdAt   DateTime @default(now())

@@ -12,7 +12,7 @@ export const postRouter = createTRPCRouter({
     }),
 
   addUser: publicProcedure
-    .input(z.object({ phoneNumber: z.string().min(1) }))
+    .input(z.object({ phoneNumber: z.string().min(1), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.user.create({
         data: {
