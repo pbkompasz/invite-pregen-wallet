@@ -1,6 +1,9 @@
-# Create T3 App
+# Para Pregen Wallet Demo
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+1. Log in with your warpcast account
+2. Query your followers and pregenerate wallets for them
+3. Mint an NFT for each
+4. Users can claim their accounts with their Warpcast account
 
 ## What's next? How do I make an app with this?
 
