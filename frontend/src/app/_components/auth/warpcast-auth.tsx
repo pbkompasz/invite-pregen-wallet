@@ -15,7 +15,7 @@ const now = new Date();
 now.setHours(now.getHours() + 1);
 const expiryTime = now.toISOString();
 
-export default function WarpcastAuth({ callback }: { callback: (status: boolean) => void}) {
+export default function WarpcastAuth({ callback }: { callback?: (status: boolean) => void}) {
   const { isAuthenticated, profile } = useProfile();
 
   const [hasValidSignature, setHasValidSignature] = useState(false);
@@ -33,6 +33,7 @@ export default function WarpcastAuth({ callback }: { callback: (status: boolean)
     const authSignature = localStorage.getItem("warpcast-signature");
     if (!authSignature) {
       console.log("No signature found in localStorage");
+      setIsVerifying(false);
       return;
     }
     const parsedAuthSignature: UseSignInData = JSON.parse(authSignature);
@@ -60,12 +61,12 @@ export default function WarpcastAuth({ callback }: { callback: (status: boolean)
           setHasValidSignature(true);
           setUsername(username ?? "");
           setFid(username ?? "");
-          callback(true);
+          callback?.(true);
         } else {
           console.log("Invalid signature");
           setHasValidSignature(false);
           localStorage.setItem("warpcast-singature", "");
-          callback(false);
+          callback?.(false);
         }
         setIsVerifying(false);
       });

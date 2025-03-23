@@ -39,7 +39,13 @@ export default function AdminAuth() {
 
   return (
     <>
-      <button onClick={() => setShowParaLogin(true)}>Login w/ Para</button>
+      <button
+        onClick={() => setShowParaLogin(true)}
+        className="bg-white border rounded-lg px-2"
+        style={{ color: "rgb(255, 78, 0)", }}
+      >
+        Sign in with Para
+      </button>
       <ParaModal
         para={para}
         isOpen={showParaLogin}
