@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { Para as ParaServer, Environment } from "@getpara/server-sdk";
-// import { verifyWarpcastSignature } from "~/clients/para";
+import { verifyWarpcastSignature } from "~/lib/backend/warpcast";
 
 const paraServer = new ParaServer(
   Environment.BETA,
@@ -10,44 +10,17 @@ const paraServer = new ParaServer(
 );
 
 export const userrRouter = createTRPCRouter({
-  getUser: publicProcedure
-    .input(z.object({ fid: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findFirst({
-        where: {
-          fid: input.fid,
-        },
-      });
+  get: publicProcedure.input(z.number())
+  .query(async ({ ctx, input}) => {
+    const user = await ctx.db.user.findFirst({
+      where: {
+        fid: input,
+      },
+    })
 
-      return user;
-    }),
-
-  createUser: publicProcedure
-    .input(
-      z.object({
-        fid: z.string().optional(),
-        username: z.string(),
-        did: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.user.create({
-        data: {
-          username: input.username,
-          did: input.did,
-          fid: input.fid,
-        },
-      });
-      return user;
-    }),
-
-  createGiveaways: publicProcedure.mutation(async ({ ctx }) => {
-    const post = await ctx.db.user.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-
-    return post ?? null;
+    return user;
   }),
+
 
   claimWallet: publicProcedure
     .input(
@@ -59,20 +32,20 @@ export const userrRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      // const { isValid, fid } = await verifyWarpcastSignature({
-      //   nonce: input.nonce,
-      //   domain: input.domain,
-      //   message: input.message,
-      //   signature: input.signature as `0x${string}`,
-      // });
-      // if (!isValid) {
-      //   return false;
-      // }
-      // const share = await ctx.db.user.findFirst({
-      //   where: {
-      //     fid,
-      //   },
-      // });
-      // return share?.userShare;
+      const { isValid, fid } = await verifyWarpcastSignature({
+        nonce: input.nonce,
+        domain: input.domain,
+        message: input.message,
+        signature: input.signature as `0x${string}`,
+      });
+      if (!isValid) {
+        return false;
+      }
+      const share = await ctx.db.user.findFirst({
+        where: {
+          fid,
+        },
+      });
+      return share?.userShare;
     }),
 });

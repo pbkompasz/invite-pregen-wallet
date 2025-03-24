@@ -1,65 +1,40 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { Para as ParaServer, Environment } from "@getpara/server-sdk";
-
-const paraServer = new ParaServer(
-  Environment.BETA,
-  process.env.NEXT_PUBLIC_PARA_API_KEY,
-);
+import { pregenerateWallets } from "~/lib/backend/para";
+import { encryptUserShare } from "~/lib/backend/encryption";
 
 export const adminRouter = createTRPCRouter({
-  addFollower: publicProcedure
-    .input(z.object({ phoneNumber: z.string().min(1), name: z.string() }))
+  pregenerateWallets: publicProcedure
+    .input(z.array(z.any()))
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.user.create({
-        data: {
-          username: input.name,
-        },
+      const wallets = await pregenerateWallets(input);
+
+      await Promise.all(
+        wallets.map(async (wallet) => {
+          if (!wallet.userShare || !wallet.wallet) {
+            return;
+          }
+          const updateOrCraeteData = {
+            authStatus: false,
+            userShare: encryptUserShare(wallet.userShare),
+            walletId: wallet.wallet.id,
+          };
+
+          const post = await ctx.db.user.upsert({
+            where: { fid: wallet.fid },
+            update: updateOrCraeteData,
+            create: {
+              ...updateOrCraeteData,
+              fid: wallet.fid,
+            },
+          });
+        }),
+      );
+      return wallets.map((wallet) => {
+        return {
+          address: wallet.wallet ? wallet.wallet.address : undefined,
+          fid: wallet.fid,
+        };
       });
-      return user.id;
-    }),
-
-  addAdmin: publicProcedure
-    .input(
-      z.object({
-        userId: z.string(),
-        email: z.string(),
-        userShare: z.string(),
-        address: z.string(),
-        phoneNumber: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const admin = await ctx.db.admin.create({
-        data: {
-          phoneNumber: input.phoneNumber,
-          userId: input.userId,
-          email: input.email,
-          userShare: input.userShare,
-          address: input.address,
-        },
-      });
-      return admin.id;
-    }),
-
-  getFollowers: publicProcedure.query(async ({ ctx }) => {
-    const post = await ctx.db.user.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-
-    return post ?? null;
-  }),
-
-  saveFollowerWallets: publicProcedure
-    .input(
-      z.object({ id: z.number(), walletId: z.string(), userShare: z.string() }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      // const post = await ctx.db.user.update({
-      //   where: { id: input.id },
-      //   data: { walletId: input.walletId, userShare: input.userShare },
-      // });
-      // return post ?? null;
     }),
 });
