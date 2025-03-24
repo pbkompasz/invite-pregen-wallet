@@ -11,17 +11,12 @@ datasource db {
 }
 
 model User {
-    id          Int      @id @default(autoincrement())
-    username        String 
+    fid          Int      @id 
     walletId    String   @default("")
     userShare   String   @default("")
     authStatus  Boolean  @default(false)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    fid         String   @default("")
-    did         String   @default("")
-
-    @@index([username])
 }
 
 model Admin {
@@ -37,9 +32,3 @@ model Admin {
 
     @@index([userId])
 }
-
-model Giveaway {
-    id          Int     @id @default(autoincrement())
-    recipient   Int
-}
-
