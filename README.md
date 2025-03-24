@@ -11,9 +11,9 @@
 
 ## Code Highlights
 
-- frontend/src/app/\_components/auth/\*.tsx – Implements the Para and Warpcast authentcation flow
-- frontend/src/app/\_components/Admin.tsx – Implements the "giveaway" workflow
-- frontend/src/lib/backend/para - Implements the bulk wallet pre-generation
+- `frontend/src/app/\_components/auth/\*.tsx` – Implements the Para and Warpcast authentcation flow
+- `frontend/src/app/\_components/Admin.tsx` – Implements the "giveaway" workflow
+- `frontend/src/lib/backend/para` - Implements the bulk wallet pre-generation
 
 ## Workflow
 
