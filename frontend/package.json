@@ -35,6 +35,7 @@
     "@trpc/client": "^11.0.0-rc.446",
     "@trpc/react-query": "^11.0.0-rc.446",
     "@trpc/server": "^11.0.0-rc.446",
+    "@types/jest": "^29.5.14",
     "ethers": "^6",
     "geist": "^1.3.0",
     "iron-session": "^8.0.4",
@@ -43,6 +44,7 @@
     "react-dom": "^18.3.1",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
+    "viem": "^2.23.14",
     "zod": "^3.23.3"
   },
   "devDependencies": {
