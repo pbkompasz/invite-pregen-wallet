@@ -6,6 +6,7 @@ import type { NetworkUserConfig } from "hardhat/types";
 
 import "./tasks/accounts";
 import "./tasks/lock";
+import "./tasks/fund";
 
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set
 
@@ -101,7 +102,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.19",
+    version: "0.8.21",
     settings: {
       metadata: {
         // Not including the metadata hash

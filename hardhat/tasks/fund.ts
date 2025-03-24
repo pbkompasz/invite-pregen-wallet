@@ -2,7 +2,7 @@ import { task, types } from "hardhat/config";
 
 task("fund", "Sends ETH to an address")
   .addParam("to", "The recipient address")
-  .addOptionalParam("amount", "Amount in ETH", "0.1", types.string)
+  .addOptionalParam("amount", "Amount in ETH", "100", types.string)
   .setAction(async (taskArgs, hre) => {
     const [deployer] = await hre.ethers.getSigners();
 

@@ -11,8 +11,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const giveaway = await deploy("GiveawayNFT", {
     from: deployer,
-    args: [UNLOCK_IN_X_DAYS],
-    log: true,
   });
 
   console.log(`contract: `, giveaway.address);
