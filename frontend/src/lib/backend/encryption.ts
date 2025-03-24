@@ -3,7 +3,7 @@ import crypto from "crypto";
 const privateKey = (process.env.ENCRYPTION_PRIV_KEY as string).replace(
   /\\n/g,
   "\n",
-); // Handle newlines
+); 
 export const encryptUserShare = (userShare: string) => {
   if (!privateKey) {
     return;
@@ -13,7 +13,7 @@ export const encryptUserShare = (userShare: string) => {
   const encrypted = crypto.privateEncrypt(
     {
       key: privateKey,
-      padding: crypto.constants.RSA_PKCS1_PADDING, // Or OAEP if needed
+      padding: crypto.constants.RSA_PKCS1_PADDING,
     },
     buffer,
   );
